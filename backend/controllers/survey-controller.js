@@ -14,7 +14,7 @@ export const createSurvey = async (req, res) => {
 
 export const getAsurvey = async (req, res) => {
     try {   
-        const survey = await Survey.findById('665a0dcb33316a10babbe0b6');
+        const survey = await Survey.findById('665cc0db3ab0314d39b3bbb8');
         if(!survey){
             return res.status(404).json({ error: 'Survey not found' });
         }
