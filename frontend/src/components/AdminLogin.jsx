@@ -11,7 +11,7 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/admin/login', {
+      const response = await fetch('https://survey-form-three-tau.vercel.app/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

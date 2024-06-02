@@ -9,7 +9,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchSurveys = async () => {
       try {
-        const response = await fetch('http://localhost:8080/admin/all-survey', {
+        const response = await fetch('https://survey-form-three-tau.vercel.app/admin/all-survey', {
           credentials: 'include',
         });
 
@@ -28,7 +28,7 @@ const AdminDashboard = () => {
   }, []);
 
   const handleLogout = async () => {
-    await fetch('http://localhost:8080/admin/logout', {
+    await fetch('https://survey-form-three-tau.vercel.app/admin/logout', {
       method: 'POST',
       credentials: 'include',
     });

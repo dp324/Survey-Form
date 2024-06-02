@@ -11,7 +11,7 @@ const SurveyForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:8080/survey/get-a-survey/`)
+    fetch(`https://survey-form-three-tau.vercel.app/survey/get-a-survey/`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -45,7 +45,7 @@ const SurveyForm = () => {
       answer: responses[questionId],
     }));
 
-    fetch('http://localhost:8080/survey/submit-survey', {
+    fetch('https://survey-form-three-tau.vercel.app/survey/submit-survey', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

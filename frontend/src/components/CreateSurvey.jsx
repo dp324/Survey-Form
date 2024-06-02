@@ -34,7 +34,7 @@ const CreateSurvey = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/survey/create-survey', {
+      const response = await fetch('https://survey-form-three-tau.vercel.app/survey/create-survey', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
