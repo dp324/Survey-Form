@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CreateSurvey = () => {
@@ -6,7 +6,29 @@ const CreateSurvey = () => {
   const [questions, setQuestions] = useState([{ questionText: '', options: [''] }]);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const response = await fetch('https://survey-form-three-tau.vercel.app/admin/checkLogin', {
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          setIsLoggedIn(true);
+          
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
 
   const handleQuestionChange = (index, value) => {
     const newQuestions = [...questions];
@@ -30,11 +52,22 @@ const CreateSurvey = () => {
     setQuestions(newQuestions);
   };
 
+  const handleDeleteQuestion = (index) => {
+    const newQuestions = questions.filter((_, qIndex) => qIndex !== index);
+    setQuestions(newQuestions);
+  };
+
+  const handleDeleteOption = (qIndex, oIndex) => {
+    const newQuestions = [...questions];
+    newQuestions[qIndex].options = newQuestions[qIndex].options.filter((_, index) => index !== oIndex);
+    setQuestions(newQuestions);
+  };
+
   const handleCreateSurvey = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://survey-form-three-tau.vercel.app/survey/create-survey', {
+      const response = await fetch('https://survey-form-three-tau.vercel.app/admin/create-survey', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,8 +91,10 @@ const CreateSurvey = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-400 to-purple-500">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-violet-600 to-purple-600">
+     {isLoggedIn ? (
+      <>
+         <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
         <h2 className="text-3xl font-bold text-center mb-8">Create New Survey</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {message && <p className="text-green-500 mb-4">{message}</p>}
@@ -87,8 +122,8 @@ const CreateSurvey = () => {
                 />
               </label>
               {question.options.map((option, oIndex) => (
-                <div key={oIndex} className="mb-2">
-                  <label className="block text-gray-700 font-bold mb-2">
+                <div key={oIndex} className="mb-2 flex items-center">
+                  <label className="block text-gray-700 font-bold mb-2 w-full">
                     Option {oIndex + 1}:
                     <input
                       type="text"
@@ -98,6 +133,13 @@ const CreateSurvey = () => {
                       className="mt-2 px-3 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </label>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteOption(qIndex, oIndex)}
+                    className="ml-2 bg-red-500 text-white px-2 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    Delete
+                  </button>
                 </div>
               ))}
               <button
@@ -106,6 +148,13 @@ const CreateSurvey = () => {
                 className="mt-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 Add Option
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDeleteQuestion(qIndex)}
+                className="ml-2 mt-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                Delete Question
               </button>
             </div>
           ))}
@@ -126,8 +175,21 @@ const CreateSurvey = () => {
           </div>
         </form>
       </div>
+      </>
+     ) : (
+      <>
+        <p className="text-red-500 mb-4">Login first!</p>
+          <button
+            onClick={() => navigate('/admin/login')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Login
+          </button>
+      </>
+     )}
     </div>
   );
 };
 
 export default CreateSurvey;
+                

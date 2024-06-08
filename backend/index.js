@@ -1,9 +1,13 @@
 import express from 'express'
 import mongoose from 'mongoose';
-import cors from 'cors'
+import cors from 'cors';
+import session from 'express-session';
 import router from './routers/user-routes.js'
 import surveyRouter from './routers/survey-routes.js';
 import adminRouter from './routers/admin-routes.js';
+import cookieParser from 'cookie-parser';
+
+
 const app = express();
 
 
@@ -35,6 +39,7 @@ app.use(cors(corsConfig));
 
 
 
+app.use(cookieParser());
 app.use(express.json());
 app.use("/user", router)
 app.use("/survey", surveyRouter)

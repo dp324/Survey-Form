@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const AdminLogin = () => {
   const [userName, setUserName] = useState('');
@@ -17,13 +18,17 @@ const AdminLogin = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ userName, password }),
+        credentials: 'include',
       });
 
       if (!response.ok) {
         throw new Error('Invalid username or password');
       }
 
-      await response.json();
+      const data = await response.json();
+      // Set token in cookies
+      Cookies.set('token', data.token, { expires: 1 }); // Expires in 1 day
+
       navigate('/admin/dashboard');
     } catch (error) {
       setError(error.message);
@@ -31,7 +36,7 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-blue-500">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-violet-600 to-purple-600">
       <h1 className="text-4xl font-bold text-white mb-8">Admin Login</h1>
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         {error && <p className="text-red-500 mb-4">{error}</p>}

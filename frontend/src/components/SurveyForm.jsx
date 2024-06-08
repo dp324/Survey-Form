@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const SurveyForm = () => {
   const [survey, setSurvey] = useState(null);
@@ -7,11 +7,11 @@ const SurveyForm = () => {
   const [error, setError] = useState(null);
   const [respondent, setRespondent] = useState('');
   const [responses, setResponses] = useState({});
-  const surveyId = '665cc0db3ab0314d39b3bbb8'; // Replace with actual survey ID
+  const id = useParams(); 
   const navigate = useNavigate();
-
+  const surveyId = id.id;
   useEffect(() => {
-    fetch(`https://survey-form-three-tau.vercel.app/survey/get-a-survey/`)
+    fetch(`http://localhost:8080/survey/get-a-survey/${surveyId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -63,12 +63,12 @@ const SurveyForm = () => {
         return response.json();
       })
       .then((data) => {
+        navigate('/submitted');
         console.log('Responses submitted successfully:', data);
       })
       .catch((error) => {
         console.error('Error submitting responses:', error);
       });
-      navigate('/');
   };
 
   if (loading) {
@@ -84,7 +84,7 @@ const SurveyForm = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-400 to-purple-500">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-violet-600 to-purple-600">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h1 className="text-3xl font-bold text-center mb-8">{survey.title}</h1>
         <form onSubmit={handleSubmit}>

@@ -1,20 +1,11 @@
 import Survey from "../models/survey.js";
 
-export const createSurvey = async (req, res) => {
-    try {
-        const { title, questions } = req.body;
-
-        const newSurvey = new Survey({ title, questions });
-        const savedSurvey = await newSurvey.save();
-        res.status(201).json(savedSurvey);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
 
 export const getAsurvey = async (req, res) => {
+    const id = req.params.id;
+    //console.log(id);
     try {   
-        const survey = await Survey.findById('665cc0db3ab0314d39b3bbb8');
+        const survey = await Survey.findById(id);
         if(!survey){
             return res.status(404).json({ error: 'Survey not found' });
         }

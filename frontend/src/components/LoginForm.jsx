@@ -10,7 +10,7 @@ const LoginForm = ({ handleLogin }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-400 to-purple-500">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-violet-600 to-purple-600">
       <h2 className="text-4xl font-bold text-white mb-8">User Login</h2>
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         <form onSubmit={handleSubmit}>
