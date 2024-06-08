@@ -12,12 +12,13 @@ const app = express();
 
 
 const corsConfig = {
+    origin : "http://localhost:5173",
     credentials: true,
     origin: true,
 };
 app.use(cors(corsConfig));
 
-// app.use(cors());
+app.use(cors());
 // app.use(
 //     cors({
 //         origin : ['http://localhost:5173'],
