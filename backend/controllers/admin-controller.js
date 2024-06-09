@@ -1,7 +1,7 @@
 import Admin from '../models/admin.js';
 import Survey from '../models/survey.js';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt from "bcryptjs";
 
 
 const jwtSecret = '123';
