@@ -37,9 +37,13 @@ export const login = async (req, res) => {
   }
 
   const token = jwt.sign({ id: admin._id, username: admin.userName }, jwtSecret, { expiresIn: '1h' });
-
+  console.log(token);
   // Send token as cookie
-  res.cookie('token', token, { httpOnly: false }).status(200).json({ message: 'Login successful' });
+  res.cookie('token', token, { 
+    httpOnly: true, 
+    secure: true, // Set to true if using HTTPS
+    sameSite: 'None', // Set to 'None' for cross-site cookies
+  }).status(200).json({ message: 'Login successful' });
 };
 
 export const logout = async (req, res) => {
