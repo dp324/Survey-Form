@@ -27,6 +27,7 @@ const AdminLogin = () => {
 
       const data = await response.json();
       // Set token in cookies
+      console.log(data);
       Cookies.set('token', data.token, { expires: 1 }); // Expires in 1 day
 
       navigate('/admin/dashboard');
