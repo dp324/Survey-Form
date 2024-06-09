@@ -11,7 +11,7 @@ const SurveyForm = () => {
   const navigate = useNavigate();
   const surveyId = id.id;
   useEffect(() => {
-    fetch(`http://localhost:8080/survey/get-a-survey/${surveyId}`)
+    fetch(`https://survey-form-three-tau.vercel.app/survey/get-a-survey/${surveyId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
