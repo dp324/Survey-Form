@@ -16,6 +16,7 @@ const App = () => {
   const handleLogin = (username, password) => {
     // Replace this with actual login logic
     if (username === 'admin' && password === 'admin123') {
+      navigate('/survey/6665440bf4dc88fe8e0bb230')
       setIsLoggedIn(true);
     }
     else{
@@ -26,11 +27,11 @@ const App = () => {
 
 
   const Home = ({ isLoggedIn }) => {
-    return isLoggedIn ? <navigate to="/survey:id" /> : <LoginForm handleLogin={handleLogin} />;
+    return isLoggedIn ? <navigate to="/survey/:id" /> : <LoginForm handleLogin={handleLogin} />;
   };
   return(
     <Routes>
-    <Route path="/" element={<Home isLoggedIn={isLoggedIn} handleLogin={handleLogin} />} />
+    <Route path="/" element={<Home handleLogin={handleLogin} />} />
     <Route path='/submitted' element={<ConfirmationPage/>}/>
     <Route path="/admin/surveyInfo/:surveyId" element={<SurveyDetails />} />
     <Route path="/admin/login" element={<AdminLogin />} />
