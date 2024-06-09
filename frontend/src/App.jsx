@@ -26,7 +26,7 @@ const App = () => {
 
 
   const Home = ({ isLoggedIn }) => {
-    return isLoggedIn ? <navigate to="/survey" /> : <LoginForm handleLogin={handleLogin} />;
+    return isLoggedIn ? <navigate to="/survey:id" /> : <LoginForm handleLogin={handleLogin} />;
   };
   return(
     <Routes>

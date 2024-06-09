@@ -9,7 +9,8 @@ const SurveyForm = () => {
   const [responses, setResponses] = useState({});
   const id = useParams(); 
   const navigate = useNavigate();
-  const surveyId = id.id;
+  //const surveyId = id.id;
+  const surveyId = '6665440bf4dc88fe8e0bb230';
   useEffect(() => {
     fetch(`https://survey-form-three-tau.vercel.app/survey/get-a-survey/${surveyId}`)
       .then((response) => {
