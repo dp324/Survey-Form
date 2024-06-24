@@ -17,30 +17,32 @@ export const getAsurvey = async (req, res) => {
 
 export const fillSurvey = async (req, res) => {
     try {
-        const { surveyId, respondent, responses } = req.body;
-
-        // Find the survey by ID
+        const { surveyId, respondentEmail, respondentName, responses } = req.body;
+    
+        if (!surveyId || !respondentEmail || !respondentName || !responses) {
+          return res.status(400).json({ error: 'All fields are required' });
+        }
+    
         const survey = await Survey.findById(surveyId);
         if (!survey) {
-            return res.status(404).json({ error: 'Survey not found' });
+          return res.status(404).json({ error: 'Survey not found' });
         }
-
-        // Ensure userResponses is initialized
+    
         if (!Array.isArray(survey.userResponses)) {
-            survey.userResponses = [];
+          survey.userResponses = [];
         }
-
-        // Add the user response to the survey
-        survey.userResponses.push({ respondent, responses });
-
-
-        // Save the updated survey document
+    
+        // Remove existing response from the same respondent
+        survey.userResponses = survey.userResponses.filter(response => response.respondentEmail !== respondentEmail);
+        
+        // Add new response
+        survey.userResponses.push({ respondentEmail, respondentName, responses });
+    
         const updatedSurvey = await survey.save();
-        
-        
+    
         res.status(200).json(updatedSurvey);
-    } catch (error) {
+      } catch (error) {
         console.error(error);
         res.status(400).json({ error: error.message });
-    }
+      }
 };

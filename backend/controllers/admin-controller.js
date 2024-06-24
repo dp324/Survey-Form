@@ -7,37 +7,43 @@ import bcrypt from "bcryptjs";
 const jwtSecret = '123';
 
 export const signup = async (req, res) => {
+  const { username, password } = req.body;
   try {
-    const { userName, password } = req.body;
-    
-    // Hash the password
+    const existingAdmin = await Admin.findOne({ username });
+    if (existingAdmin) {
+      return res.status(400).json({ error: 'Username already exists' });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    
-    // Create new admin
-    const newAdmin = new Admin({ userName, password: hashedPassword });
-    const savedNewAdmin = await newAdmin.save();
-    
-    res.status(201).json(savedNewAdmin);
+    const newAdmin = new Admin({
+      username: username,
+      password: hashedPassword,
+    });
+
+    await newAdmin.save();
+    res.status(201).json({ message: 'Admin created successfully' });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.log(error);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
 export const login = async (req, res) => {
   const { username, password } = req.body;
-  const admin = await Admin.findOne({ username });
-
+  //console.log(username);
+  const admin = await Admin.findOne({ username });  
+  //console.log(admin);
   if (!admin) {
     return res.status(401).json({ error: 'Invalid username or password' });
   }
 
   const validPassword = await bcrypt.compare(password, admin.password);
   if (!validPassword) {
-    return res.status(401).json({ error: 'Invalid username or password' });
+    return res.status(401).json({ error: 'Invalid password' });
   }
 
-  const token = jwt.sign({ id: admin._id, username: admin.userName }, jwtSecret, { expiresIn: '1h' });
-  console.log(token);
+  const token = jwt.sign({ id: admin._id, username: admin.username }, jwtSecret, { expiresIn: '1h' });
+  //console.log(token);
   // Send token as cookie
   res.cookie('token', token, { 
     httpOnly: true, 
@@ -54,31 +60,51 @@ export const logout = async (req, res) => {
   }).status(200).json({ message: 'Logout successful' });
 };
 
-
 export const createSurvey = async (req, res) => {
   try {
-    const { title, questions } = req.body;
+    const { title, description, questions } = req.body;
+    const adminId = req.user.id;   
+    const newSurvey = new Survey({
+      title,
+      description,
+      questions,
+      admin: adminId
+    });
 
-    const newSurvey = new Survey({ title, questions });
-    const savedSurvey = await newSurvey.save();
-    res.status(201).json(savedSurvey);
-} catch (error) {
-    res.status(400).json({ error: error.message });
-}
+    await newSurvey.save();
+    res.status(201).json(newSurvey);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 export const getAllSurveys = async (req, res) => {
-  const surveys = await Survey.find();
-  res.status(200).json(surveys);
+  const adminId = req.user.id; 
+
+  try {
+      const surveys = await Survey.find({ admin: adminId });
+      res.status(200).json(surveys);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
 };
 
 export const deleteSurvey = async (req, res) => {
-  try {
-    const surveyId = req.params.id;
-    await Survey.findByIdAndDelete(surveyId);
-    res.status(200).json({ message: 'Successfully deleted' });
-  } catch (error) {
-    res.status(400).json({ message: 'Some error occurred!' });
+  const adminId = req.user.id;
+  const admin = await Admin.findById(adminId);
+  const { password } = req.body;
+  const validPassword = await bcrypt.compare(password, admin.password);
+  if (!validPassword) {
+    return res.status(401).json({ error: 'Invalid password' });
+  }
+  else{
+    try {
+      const surveyId = req.params.id;
+      await Survey.findByIdAndDelete(surveyId);
+      res.status(200).json({ message: 'Successfully deleted' });
+    } catch (error) {
+      res.status(400).json({ message: 'Some error occurred!' });
+    }
   }
 };
 
@@ -98,7 +124,7 @@ export const surveyInfo = async (req, res) => {
 
 export const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
-
+  //console.log(token);
   if (!token) {
     return res.status(401).json({ message: 'Token is required' });
   }
@@ -114,9 +140,10 @@ export const verifyToken = (req, res, next) => {
 };
 
 export const checkLogin = (req, res) => {
-  try {
-    res.status(200).json({message : "found"});
-  } catch (error) {
-    console.log(error);
+  if (req.user) {
+    return res.json({ username: req.user.username });
+  } else {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
-}
+};
+

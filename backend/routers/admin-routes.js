@@ -10,6 +10,6 @@ adminRouter.post('/create-survey', verifyToken, createSurvey)
 adminRouter.get('/surveyInfo/:id', verifyToken, surveyInfo)
 adminRouter.get('/all-survey', verifyToken, getAllSurveys)
 adminRouter.post('/signup', signup)
-adminRouter.delete('/delete/:id', verifyToken, deleteSurvey);
+adminRouter.delete('/delete-survey/:id', verifyToken, deleteSurvey);
 
 export default adminRouter;
