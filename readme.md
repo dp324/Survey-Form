@@ -27,7 +27,5 @@ FORMO is a survey form platform where admins can create an account, manage surve
     <img src="./frontend/images Github/Signup.png" alt="Screenshot 3" width="400" height="400">
     <img src="./frontend/images Github/Signin.png" alt="Screenshot 4" width="400" height="400">
 </div>
-<div style="display: flex;">
-    <img src="./frontend/images Github/CreateForm.png" alt="Screenshot 5" width="400" height="500">
-    <img src="./frontend/images Github/Analysis.png" alt="Screenshot 6" width="400" height="500">
-</div>
+<img src="./frontend/images Github/CreateForm.png" alt="Screenshot 5" width="800" height="500">
+<img src="./frontend/images Github/Analysis.png" alt="Screenshot 6" width="800" height="500">
