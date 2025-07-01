@@ -2,9 +2,11 @@ import Admin from '../models/admin.js';
 import Survey from '../models/survey.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcryptjs";
+import dotenv from 'dotenv';
+dotenv.config();
 
 
-const jwtSecret = '123';
+const jwtSecret = process.env.JWT_SECRET;
 
 export const signup = async (req, res) => {
   const { username, password } = req.body;

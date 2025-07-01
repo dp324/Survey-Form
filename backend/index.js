@@ -5,6 +5,8 @@ import router from './routers/user-routes.js'
 import surveyRouter from './routers/survey-routes.js';
 import adminRouter from './routers/admin-routes.js';
 import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+dotenv.config();
 
 
 const app = express();
@@ -24,7 +26,7 @@ app.use("/user", router)
 app.use("/survey", surveyRouter)
 app.use("/admin", adminRouter)
 
-const mongoDBURL = 'mongodb+srv://deepanshux324:ZYQBrM9U6uykw5wI@cluster0.zb6ehfc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const mongoDBURL = process.env.MONGODB_URI;
 
 mongoose.connect(mongoDBURL)
 .then(() => {
