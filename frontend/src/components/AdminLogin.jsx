@@ -4,8 +4,8 @@ import Cookies from 'js-cookie';
 import { backendURL } from '../utils/BackendURL';
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('admin123');
+  const [password, setPassword] = useState('admin324');
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const URL = backendURL;

@@ -1,7 +1,6 @@
 import express from 'express'
 import mongoose from 'mongoose';
 import cors from 'cors';
-import session from 'express-session';
 import router from './routers/user-routes.js'
 import surveyRouter from './routers/survey-routes.js';
 import adminRouter from './routers/admin-routes.js';
